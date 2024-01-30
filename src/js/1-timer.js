@@ -1,7 +1,8 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import iziToast from "izitoast/dist/js/iziToast";
-import "izitoast/dist/css/iziToast.min.css";
+import iziToast from "iziToast/dist/js/iziToast";
+import "iziToast/dist/css/iziToast.min.css";
+
 
 const options = {
     enableTime: true,
@@ -10,9 +11,9 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
       const userSelectedDate = selectedDates[0];
+      console.log(userSelectedDate);
   
       if (userSelectedDate < new Date()) {
-       
         iziToast.error({
           title: "Error",
           message: "Please choose a date in the future",
@@ -20,42 +21,42 @@ const options = {
   
         document.querySelector('[data-start]').disabled = true;
       } else {
-      
         document.querySelector('[data-start]').disabled = false;
       }
     },
   };
   
   flatpickr("#datetime-picker", options);
-
-
+  
   document.querySelector('[data-start]').addEventListener('click', () => {
-   
     const userSelectedDate = flatpickr("#datetime-picker").selectedDates[0];
   
-   
     if (userSelectedDate && userSelectedDate > new Date()) {
- 
       startTimer(userSelectedDate);
     }
   });
-
+  
   function startTimer(endDate) {
+    console.log(endDate, new Date());
+  
     const timerInterval = setInterval(() => {
       const timeDifference = endDate - new Date();
-      const { days, hours, minutes, seconds } = convertMs(timeDifference);
-
-      updateTimerUI(days, hours, minutes, seconds);
   
-      
       if (timeDifference <= 0) {
         clearInterval(timerInterval);
+        updateTimerUI(0, 0, 0, 0);
+        iziToast.success({
+          title: "Success",
+          message: "Time's up!",
+        });
+      } else {
+        const { days, hours, minutes, seconds } = convertMs(timeDifference);
+        updateTimerUI(days, hours, minutes, seconds);
       }
     }, 1000);
   }
   
   function updateTimerUI(days, hours, minutes, seconds) {
-  
     document.querySelector('[data-days]').textContent = addLeadingZero(days);
     document.querySelector('[data-hours]').textContent = addLeadingZero(hours);
     document.querySelector('[data-minutes]').textContent = addLeadingZero(minutes);
@@ -63,11 +64,12 @@ const options = {
   }
   
   function addLeadingZero(value) {
-    
     return value < 10 ? `0${value}` : value;
   }
   
   function convertMs(ms) {
+    console.log(ms);
+  
     const second = 1000;
     const minute = second * 60;
     const hour = minute * 60;
@@ -79,4 +81,3 @@ const options = {
     const seconds = Math.floor((((ms % day) % hour) % minute) / second);
   
     return { days, hours, minutes, seconds };
-  }
