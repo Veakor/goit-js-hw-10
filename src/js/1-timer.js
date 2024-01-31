@@ -3,7 +3,9 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast/dist/js/iziToast";
 import "izitoast/dist/css/iziToast.min.css";
 
+
 let userSelectedDate;
+let timerInterval; 
 
 const options = {
     enableTime: true,
@@ -19,25 +21,25 @@ const options = {
                 message: "Please choose a date in the future",
             });
 
-            document.querySelector('[data-start]').addEventListener('click', () => {
-                if (userSelectedDate && userSelectedDate > new Date()) {
-                    startTimer(userSelectedDate);
-                }
-            });
+            document.querySelector('[data-start]').disabled = true;
+        } else {
+            document.querySelector('[data-start]').disabled = false;
+        }
+    },
 };
-    
+
 flatpickr("#datetime-picker", options);
 
 document.querySelector('[data-start]').addEventListener('click', () => {
-    const userSelectedDate = flatpickr("#datetime-picker").selectedDates[0];
-
     if (userSelectedDate && userSelectedDate > new Date()) {
+        
+        clearInterval(timerInterval);
         startTimer(userSelectedDate);
     }
 });
 
 function startTimer(endDate) {
-    const timerInterval = setInterval(() => {
+    timerInterval = setInterval(() => {
         const timeDifference = endDate - new Date();
 
         if (timeDifference <= 0) {
@@ -78,4 +80,3 @@ function convertMs(ms) {
 
     return { days, hours, minutes, seconds };
 }
-  }}
