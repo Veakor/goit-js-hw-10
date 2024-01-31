@@ -3,13 +3,15 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast/dist/js/iziToast";
 import "izitoast/dist/css/iziToast.min.css";
 
+let userSelectedDate;
+
 const options = {
     enableTime: true,
     time_24hr: true,
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        const userSelectedDate = selectedDates[0];
+        userSelectedDate = selectedDates[0];
 
         if (userSelectedDate < new Date()) {
             iziToast.error({
@@ -17,13 +19,13 @@ const options = {
                 message: "Please choose a date in the future",
             });
 
-            document.querySelector('[data-start]').disabled = true;
-        } else {
-            document.querySelector('[data-start]').disabled = false;
-        }
-    },
+            document.querySelector('[data-start]').addEventListener('click', () => {
+                if (userSelectedDate && userSelectedDate > new Date()) {
+                    startTimer(userSelectedDate);
+                }
+            });
 };
-
+    
 flatpickr("#datetime-picker", options);
 
 document.querySelector('[data-start]').addEventListener('click', () => {
@@ -76,3 +78,4 @@ function convertMs(ms) {
 
     return { days, hours, minutes, seconds };
 }
+  }}
