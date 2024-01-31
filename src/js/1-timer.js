@@ -6,6 +6,8 @@ import "izitoast/dist/css/iziToast.min.css";
 let userSelectedDate;
 let timerInterval;
 
+document.querySelector('[data-start]').disabled = true;
+
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -38,7 +40,7 @@ document.querySelector('[data-start]').addEventListener('click', () => {
 });
 
 function startTimer(endDate) {
-    const timerInterval = setInterval(() => {
+    timerInterval = setInterval(() => {
         const timeDifference = endDate - new Date();
 
         if (timeDifference <= 0) {
