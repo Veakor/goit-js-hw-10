@@ -4,6 +4,7 @@ import iziToast from "izitoast/dist/js/iziToast";
 import "izitoast/dist/css/iziToast.min.css";
 
 let userSelectedDate;
+let timerInterval;
 
 const options = {
     enableTime: true,
@@ -31,6 +32,7 @@ flatpickr("#datetime-picker", options);
 document.querySelector('[data-start]').addEventListener('click', () => {
     
     if (userSelectedDate && userSelectedDate > new Date()) {
+        clearInterval(timerInterval);
         startTimer(userSelectedDate);
     }
 });
