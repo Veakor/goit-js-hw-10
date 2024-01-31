@@ -36,6 +36,10 @@ document.querySelector('[data-start]').addEventListener('click', () => {
     if (userSelectedDate && userSelectedDate > new Date()) {
         clearInterval(timerInterval);
         startTimer(userSelectedDate);
+
+
+        document.querySelector('[data-start]').disabled = true;
+    
     }
 });
 
